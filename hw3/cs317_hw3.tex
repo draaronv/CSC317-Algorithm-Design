@@ -1,0 +1,132 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{pdfpages}
+\usepackage{microtype}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{setspace}
+\usepackage{mathtools}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{amssymb}
+\usepackage{physics}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{multicol}
+\usepackage{titlesec}
+\usepackage{titling}
+\usepackage{graphicx}
+\setcounter{tocdepth}{3}
+\usepackage[nottoc,notlot,notlof]{tocbibind}
+\title{\Huge{CSC317:Data Structures and Algorithm Design}\\\LARGE{Homework 1}}
+\author{Aaron Jesus Valdes}
+\begin{document}
+	\maketitle
+	\clearpage
+	\onehalfspacing
+	\clearpage
+	\section*{Problem 1}
+		\subsection*{Part a}
+			For this problem, we simply need to follow section 6.5 of the book where they describe how to create a max-heapify and instead use it to develop a min-heapify.
+			\\
+			First we need to develop a heap from the array, then we need to called the heap-extract-min(A)
+			\\
+			\begin{algorithm}
+				\caption{heap-extract-min(A)}
+				\begin{algorithmic}
+					\State $ min\leftarrow A[1]$
+					\State $A[1]\leftarrow A[heap-size[A]]$
+					\State $heap-size[A]\leftarrow heap-size[A]-1$
+					\State $min-Heapify(A,1)$
+					\State \textbf{return } min
+				\end{algorithmic}
+			\end{algorithm}
+			\begin{algorithm}
+				\caption{min-Heapify(A,i)}
+				\begin{algorithmic}[1]
+					\State $l\leftarrow LEFT(i)$\Comment{Setting left child node A[i]}
+					\State $r \leftarrow RIGHT(i)$\Comment{Setting right child node A[i]}
+					\If{$l\le|A|$\textbf{ and }$A[l]<A[i]$}\Comment{Checking for the smallest element}
+						\State $min \leftarrow l$
+					\Else{$\text{ min} \leftarrow i$}
+					\EndIf
+					\If{$r\le |A|$\textbf{ and }$A[r]<A[min]$}
+						\State $min \leftarrow r$
+					\EndIf
+					\If{$\text{ min} \ne i$}\Comment{Updating the min-heap tree}
+						\State exchange $A[i]\leftrightarrow A[min]$
+						\State min-Heapify(A,min)
+					\EndIf
+				\end{algorithmic}
+			\end{algorithm}
+		\subsection*{Part b}
+			Building the heap takes O(n) while heap-extract-min takes O(log(n)) therefore the total time complexity is O(n+klog(n)) as previously mentioned. Therefore given the fact that the upper bound for build a heap is O(n) and for extracting the min-value is O(k log(n)) then therefore the combination of both worst-case scenario must be O(n+klog(n))
+	\section*{Problem 2}
+		\begin{algorithm}[H]
+			\caption{Modified Quicksort using Select and Partition from Section 9.3}
+			\begin{algorithmic}[1]
+				\State	QUICKSORT(A,p,r)
+					\If{$p>r$}
+					\State	$i\leftarrow \floor[\big]{\frac{r-p+1}{2}}$
+					\State $x\leftarrow SELECT(A,p,r,i)$ \Comment{Finds the smallest value from the array}
+					\State $q\leftarrow \text{SELECT-PARTITION}(A,p,r,x)$
+					\State $QUICKSORT(A,p,q-1)$
+					\State $QUICKSORT(A,q+1,r)$
+					\EndIf
+			\end{algorithmic}
+		\end{algorithm}
+		\begin{algorithm}[H]
+			\caption{SELECT-PARTITION(A,p,r,x)}
+			\begin{algorithmic}[1]
+				\State $i\leftarrow x$
+				\State $\text{exchange } A[r]\leftrightarrow A[i]$
+				\State $\text{\textbf{return }PARTITION(A,p,r)}$
+			\end{algorithmic}
+		\end{algorithm}
+		\begin{algorithm}[H]
+			\caption{PARTITION(A,p,r)}
+			\begin{algorithmic}[1]
+				\State $x\leftarrow A[r]$
+				\State $i\leftarrow p-1$
+				\For{$j\leftarrow p$\textbf{ to }$r-1$}
+					\If{$A[j]\le x$}
+						\State $i\leftarrow i+1$
+						\State exchange $A[i]\leftrightarrow A[j]$
+					\EndIf
+				\EndFor
+				\State exchange $A[i+1]\leftrightarrow A[r]$
+				\State \textbf{return } $i+1$
+			\end{algorithmic}
+		\end{algorithm}
+	\section*{Problem 3}
+		Solving the recurrence using the substitution method therefore we must guess the form of our solution.
+		\\
+		\textbf{Claim:} The recurrence $T(n)=2T(n/2)+c_1n + c_2$ has solution $T(n)\le c_3 nlog(n)$\\
+		\textbf{Inductive Step:}\\
+		\begin{align}
+			T(n)=&2T(n/2)+c_1n + c_2\\
+			T(n)\le& 2[c_3(\frac{n}{2})(log(\frac{n}{2}))] +c_1n+c_2\\
+			=& c_3nlog(\frac{n}{2})+c_1n+c_2\\
+			=& c_3 n(log(n)-log(2))+c_1n+c_2\\
+			=& c_3 nlog(n)+c_1n-c_3 n+c_2\\
+			=& c_3 nlog(n)-(-c_1n+c_3 n-c_2)\\
+		\end{align}
+		Now we want the last term to be $\le c_3 nlog(n)$ so $-c_1n+c_3 n-c_2\le 0$
+		\begin{align}
+			-c_1n+c_3 n-c_2\le& 0\\
+			c_3 n\le& c_1n+c_2\\
+			c_3 \le&\frac{c_1n+c_2}{n}\\
+			c_3 \le& c_1 +\frac{c_2}{n}
+		\end{align}
+		Therefore as long as $c_3$ is a less than $\frac{c_2}{n} + c_1$ our claim is true
+		\\
+		Now we need to find $n_0$\\
+		\begin{align}
+			c_3 \le& c_1 +\frac{c_2}{n_0}\\
+			c_3 -c_1 \le&\frac{c_2}{n_0}\\
+			n_0\le& \frac{c_2}{c_3 -c_1}\\
+		\end{align}
+		Therefore $n_0$ must be greater than $\frac{c_2}{c_3 -c_1}$
+\end{document}

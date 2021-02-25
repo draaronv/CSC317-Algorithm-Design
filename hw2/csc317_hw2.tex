@@ -1,0 +1,128 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{pdfpages}
+\usepackage{microtype}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{setspace}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{amssymb}
+\usepackage{physics}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{multicol}
+\usepackage{titlesec}
+\usepackage{titling}
+\usepackage{graphicx}
+\setcounter{tocdepth}{3}
+\usepackage[nottoc,notlot,notlof]{tocbibind}
+\title{\Huge{CSC317:Data Structures and Algorithm Design}\\\LARGE{Homework 2}}
+\author{Aaron Jesus Valdes}
+\begin{document}
+	\maketitle
+	\clearpage
+	\onehalfspacing
+	\clearpage
+	\section*{Problem 1}
+		\subsection*{a}
+			\begin{equation}
+				T(n)=\begin{cases}
+						\Theta(1) & n=1 \\
+						T(\ceil[\big]{\frac{n}{2}})+T(\floor[\big]{\frac{n}{2}}) + \Theta(n) & n>1
+					 \end{cases}
+			\end{equation}
+			Which is the same as
+			\begin{equation}
+			T(n)=2T(\floor[\big]{\frac{n}{2}}) + n
+			\end{equation}
+		\subsection*{b}
+			By using induction, we can easily just prove that the time complexity for our recurrence is equal to O(nlogn) and therefore we say that T(n)=O(n log(n)) which implies that $T(n)\le c n log(n)$
+			\\
+			\begin{align}
+				T(n)\le&2T(\floor[\big]{\frac{n}{2}}) + n &\text{Substitute nlog(n)}\\
+				T(n)\le&2(c(\frac{n}{2})(log(\frac{n}{2})))+ n & \text{Next we simplify}\\
+				T(n)\le&cnlog(\frac{n}{2})+ n & \text{We expand the logarithm}\\
+				T(n)\le&cnlog(n)-cnlog(2) +n &\text{Simply the log(2) since it is equal to 1}\\
+				T(n)\le&cnlog(n)-cn +n &\text{If n}\ge 1\text{ then n cancels out}\\
+				T(n)\le&cnlog(n)&\text{If n}\ge 1\text{ then n cancels out}\\
+			\end{align}
+			Now we need to check for which values of n is our solution correct therefore we must evaluate for a few cases to examine if our solution might be correct
+			\\
+			\begin{align}
+				T(1)=&1! & T(1)=c_1 log(1)\\
+				T(1)=&1! & T(1)=0 & &\therefore T(1)\ne T(1)&\\
+				T(2)=&2T(1)+2&T(2)\le c(2)log(2)\\
+				T(2)=&4&4\le 2c&&c=2&\\
+				T(3)=&2T(1)+3&T(2)\le c(3)log(3)\\
+				T(3)=&5&5\le 3log(3)c&&c=2&\\
+			\end{align}
+			Therefore T(n)=O(n log(n)) is correct as long as $c\ge2$
+			\newpage
+		\section*{Problem 2}
+			\section*{a)$O(f_3(x)) = f_1(x)$}
+				\begin{align}
+					O(f_3(x)) = &f_1(x)& \text{Substituting the actual values}\\
+					O(x^3-3x^2) = &2x^2+3x& \text{Convert to } 0\le f(x) \le cg(x)\\
+					0\le 2x^2+3x \le& c(x^3-3x^2)&2x^2+3x \text{ is always greater than 0}\\
+					2x^2+3x \le& c(x^3-3x^2) & \text{Factor out}\\
+					2x^2+3x \le& cx^2(x-3) & \text{Move to the other side}\\
+					\frac{2x^2+3x}{x^2(x-3)}\le& c& \text{Simplify}\\
+					\frac{2x+3}{x(x-3)}\le& c& \text{Simplify}\\
+					\frac{2x+3}{x(x-3)}\le& c& \therefore x\ge 4 \implies n_0=4\\
+				\end{align}
+				Therefore if a constant c exist for a value greater than or equal to $n_0$ then $O(f_3(x)) =f_1(x)$
+			\section*{b)$O(g(x)) = f_2(x)$}
+				\begin{align}
+					O(g(x))&= f_2(x)& \text{Substituting the actual values}\\
+					O(x^3-0.5x^2+3x+1)&=0.5x^2+1 &\text{Convert to } 0\le f(x) \le cg(x)\\
+					0 \le 0.5x^2+1 \le& c(x^3-0.5x^2+3x+1) &0.5x^2+1 \text{ is always greater than 0}\\
+					0.5x^2+1 \le& c(x^3-0.5x^2+3x+1) & \text{Move to the other side}\\
+					\frac{0.5x^2+1}{x^3-0.5x^2+3x+1}&\le c &\therefore c\ge 0 \text{ for } x^3-0.5x^2+3x+1>0\\
+				\end{align}
+				Now we need to solve for x 
+				\begin{align}
+					0.5x^2+1 \le& x^3 - 0.5x^2+3x+1&\text{Simplify it towards one side}\\
+					x^2 -3x-x^3\le& 0&\text{Factor out -x}\\
+					-x(x^2-x+3)\le&0& \text{Multiply both sides by -1}\\
+					x(x^2-x+3)\ge&0 &\therefore x=0 \text{ and } x>0
+				\end{align}
+				If we test x=0 we $(0)^3-0.5(0)^2+3(0)+1>0 \therefore 1>0$ which is true meaning\\
+				Therefore a constant c exist for a value greater than or equal to $n_0$ then $O(g_(x)) =f_2(x)$
+				
+			\section*{c)$\Omega(f_2(x)) = f_3(x)$}
+				\begin{align}
+					\Omega(f_2(x)) =& f_3(x)&\text{Substituting the actual values}\\
+					\Omega(0.5x^2+1)=&x^3-3x^2  & \text{Convert to } 0\le cg(n) \le f(n)\\
+					0\le c(0.5x^2+1) \le& x^3-3x^2 & 0.5x^2+1 \text{ is always greater than 0}\\
+					c(0.5x^2+1) \le& x^3-3x^2 & \text{Move to the other side}\\
+					0\le c \le &\frac{x^3-3x^2}{0.5x^2+1} &\text{c is true for all values of x}
+				\end{align}
+				$\therefore \Omega(f_2(x)) = f_3(x)$ is true
+			\section*{d)$\Omega(g(x)) = f_3(x)$}
+				\begin{align}
+					\Omega(g(x)) =& f_3(x)& \text{Substituting the actual values}\\
+					\Omega(x^3-0.5x^2+3x+1)=&x^3-3x^2&\text{Convert to } 0\le cg(n) \le f(n)\\
+					0 \le c(x^3-0.5x^2+3x+1) \le& x^3-3x^2 & \text{Move to the other side}\\
+					0 \le c\le&\frac{x^3-3x^2}{x^3-0.5x^2+3x+1}  &\text{c is true for } x^3-0.5x^2+3x+1>0	
+				\end{align}
+				Now we need to find the x values where c is true
+				\begin{align}
+					x^3-0.5x^2+3x+1=&x^3-3x^2 &\text{Multiply by 10}\\
+					10x^3-5x^2+30x+10=&10x^3-30x^2 &\text{Simplify}\\
+					25x^2+30x+10=&0 &\text{Use quadratic equation}\\
+					x=&-\frac{3}{5}\pm i\frac{1}{5}&\therefore \text{ there is no x values where c is true}
+				\end{align}
+				$\therefore \Omega(g(x)) \ne f_3(x)$
+			\section*{e)$\Theta(g(x)) = f_3(x)$}
+				\begin{align}
+					\Theta(g(x)) =& f_3(x)&\text{Substituting the actual values}\\
+					\Theta(x^3-0.5x^2+3x+1) =& x^3-3x^2&\text{Convert to } 0\le c_1g(n) \le f(n) \le c_2 g(n)\\
+					0\le c_1 (x^3-0.5x^2+3x+1) \le& x^3-3x^2 \le c_2(x^3-0.5x^2+3x+1) &\text{Test the lower bounds first}\\
+					0\le c_1 (x^3-0.5x^2+3x+1) \le& x^3-3x^2 &\text{Same result  as in the previous question}\\ 
+				\end{align}
+				Therefore $\Theta(g(x)) \ne f_3(x)$ since $\Omega(g(x)) \ne f_3(x)$ 
+\end{document}

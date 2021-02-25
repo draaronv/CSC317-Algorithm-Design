@@ -1,0 +1,120 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{pdfpages}
+\usepackage{microtype}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{setspace}
+\usepackage{mathtools}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{amssymb}
+\usepackage{physics}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{multicol}
+\usepackage{titlesec}
+\usepackage{titling}
+\usepackage{graphicx}
+\setcounter{tocdepth}{3}
+\usepackage[nottoc,notlot,notlof]{tocbibind}
+\title{\Huge{CSC317:Data Structures and Algorithm Design}\\\LARGE{Homework 1}}
+\author{Aaron Jesus Valdes}
+\begin{document}
+	\maketitle
+	\clearpage
+	\onehalfspacing
+	\clearpage
+	\section*{Problem 1}
+		\subsection*{a}
+		Between n=2 and n=588 bubble sort beats heap sort.
+		\subsection*{b}
+			\begin{align}
+				512n\log_2 (n)\le&8n^2 &  \text{Solve for n}\\
+				512n\log_2 (n) -8n^2 =&0 \\
+				8n(64\log_2 (n) -n) =&0 \\
+				64\log_2 (n) -n=&0 & \text{n=0 is a solution}\\
+				\log_2(n)=&\frac{n}{64} \\
+				2^{\log_2(n)}=&2^{\frac{n}{64}}\\
+				n=&2^{\frac{n}{64}}& \text{Convert to Lambert form}\\
+				n(2^{-\frac{n}{64}})=&(2^{\frac{n}{64}})(2^{-\frac{n}{64}})\\
+				n((e^{\ln(2)})^{-\frac{n}{64}})=&1\\
+				n(e^{-\frac{n \ln(2)}{64}})=&1 &u=-\frac{n \ln(2)}{64} n=-\frac{64u}{ln(2)}&\\
+				(-\frac{64u}{ln(2)})(e^{u})=&1\\
+				ue^u=&-\frac{\ln(2)}{64}& \text{Lambert form}\\
+				u=&W_{-1}(-\frac{\ln(2)}{64})& u=&W_{0}(-\frac{\ln(2)}{64})&\text{Substitute u back}\\
+-\frac{n \ln(2)}{64}=&W_{-1}(-\frac{\ln(2)}{64})& -\frac{n \ln(2)}{64}=&W_{0}(-\frac{\ln(2)}{64})&\text{Substitute u back}\\
+n=&\frac{-64W_{0}(-\frac{\ln(2)}{64})}{ln(2)}&n=&\frac{-64W_{-1}(-\frac{\ln(2)}{64})}{ln(2)}& \text{We need to evaluate}\\
+			\end{align}
+			Therefore the solution are n$\ge$1.011 or n$\le$588.92, however n=1.011 cannot be a solution since the minimum amount of numbers we need to have to sort is n=2 therefore the only solution is n$\le$588.92\\
+			This solution is a fraction which means that we have to take the floor of it to be able to have an integer solution
+			$\therefore$ n$\le$588
+	\section*{Problem 2}
+		\section*{What is the worst-case time complexity of the algorithm SEARCH-A?(Linked List)}
+			The worst case scenario does not depend if the set of integers $S_i$ is sorted or unsorted given the fact that the time complexity does not change between the two sets. If the set of integers is unsorted or sorted,we can perform linear search whose worst-case time complexity is O(n) given the fact that the time complexity to traverse through a linked-list is O(n).\\
+		\section*{What is the worst-case time complexity of the algorithm SEARCH-B?(Queue)}
+			The worst case scenario does not depend if the set of integers $S_i$ is sorted or unsorted given the fact that the time complexity does not change between the two sets. If the set of integers is unsorted or sorted,we can perform linear search whose worst-case time complexity is O(n) given the fact that the time complexity to traverse through a queue is O(n).\\
+		\section*{What is the worst-case time complexity of the algorithm SEARCH-C?Array}
+			The worst case scenario depends if the set of integers $S_i$ is sorted or unsorted given the fact that the time complexity drastically changes between the two.\\
+			If the set of integers is sorted we can use binary-search whose worst-case time complexity is O(log(n)).\\
+			However, if the set of integers in unsorted we can use linear-search whose worst-case time complexity is O(n).\\
+	\section*{Problem 3}
+		\subsection*{a}
+			The lower bound for a problem is the worst case running time for the best possible algorithm  for that problem. Therefore for the sorting algorithm, the best possible algorithm is the merge sort whose worst-case running time is $O(nlog(n))$ meaning that the lower-bound for the sorting problem is $\Omega(nlog(n))$
+		\subsection*{b}
+			\begin{enumerate}
+				\item Bubble Sort
+					\subitem Worst Case: O($n^2$)
+				\item Insertion Sort
+					\subitem Worst Case: O($n^2$)
+				\item Selection Sort
+					\subitem Worst Case: O($n^2$)
+				\item Quicksort
+					\subitem Worst Case: O($n^2$)
+				\item Mergesort
+					\subitem Worst Case: $O(nlog(n))$
+			\end{enumerate}
+		\subsection*{c}
+			The upper bound for the sorting algorithm is $O(n^2)$ 
+		\subsection*{d}
+			From the previous list there is only one that is optimal which is the merge sort since it satisfies the conditions to be an optimal algorithm since the upper bound is the same as the lower bound.
+	\section{Problem 4}
+		\begin{algorithm}
+			\caption{Insertion-Sort(A) non-decreasing order}
+			\begin{algorithmic}[1]
+				\For{$j\leftarrow 2$  \textbf{to} $length[A]$}
+					\State $key \leftarrow A[j]$
+					\State $i\leftarrow j-1$
+				\While{$i>0 \text{ and } A[i]>key$}
+					\State$A[i+1]\leftarrow A[i]$
+					\State $i\leftarrow i-1$
+				\EndWhile
+				\State $A[i+1]\leftarrow key$
+				\EndFor
+			\end{algorithmic}
+		\end{algorithm}
+	\begin{algorithm}
+		\caption{Insertion-Sort(A) non-increasing order}
+		\begin{algorithmic}[1]
+			\For{$j\leftarrow 2$  \textbf{to} $length[A]$}
+				\State $key \leftarrow A[j]$
+				\State $i\leftarrow j-1$
+				\While{$i>0 \text{ and } A[i]<key$}\Comment{We just need to change the sign}
+					\State$A[i+1]\leftarrow A[i]$
+					\State $i\leftarrow i-1$
+				\EndWhile
+				\State $A[i+1]\leftarrow key$
+			\EndFor
+		\end{algorithmic}
+	\end{algorithm}
+	\section*{Problem 5}
+		\textbf{Loop invariant: } For every iteration of the 'for' loop , the sub-array A[1 ... j-1] is going to consist of the original element that are in a sorted order
+		\\
+		\textbf{Initialization: } Prior to the first iteration we have j=2 therefore the sub-array A[i ... j-1] is going to be equal to A[1] which means that the loop invariant holds true since an array of a single element is always sorted.
+		\\
+		\textbf{Maintenance:} Given the fact that the while loop places A[j] in the correct position for each iteration, it means that the sub-array A[1 ... j] becomes sorted. Therefore at the beginning of the next iteration where j becomes j+1, the loop invariant holds true since the subarray A[i ... j] is sorted. 
+		\\
+		\textbf{Termination:} The outer loop terminates when $j > n$ which means that it terminates when j=n+1. Therefore the sub-array A[1 ... j-1] becomes A[1 ...n], which means that by the definition of the loop invariant A[1 ...n] must be in a sorted order which is true and therefore the termination property holds true.
+		\\
+\end{document}
